@@ -1,0 +1,35 @@
+{% extends 'base.html' %} 
+{% block content %}
+<div class="home__bodys">
+    {% for body in bodys %}
+
+        <div class="bodys mb-5">
+            <h3 class="title is-3 has-text-success">{{body.style}}</h3>
+            <hr />
+
+            {% for car in body.cars.all %}
+
+                <div class="car">
+                    <span>{{forloop.counter}}</span>
+                    <span><b>{{car.make}}</b></span>
+                    <span>{{car.model}}</span>
+                    <span>
+                        <!--   Here we are creating an anchor
+                        tag that when clicked will hit our new
+                        route and send a query to remove the song     -->
+                        <a href="{% url 'body_car_assoc' body.pk car.pk %}?assoc=remove" class="button is-danger is-outlined">
+                        <span class="icon is-small">
+                            <i class="fas fa-times"></i>
+                        </span>
+                        </a>
+                    </span>
+                </div>
+
+            {% endfor %}
+        </div>
+    {% empty %} 
+        <div class="car mb-5">"There are no cars in this bodystyle"</div>
+    {% endfor %}
+</div>
+{% endblock %}
+  

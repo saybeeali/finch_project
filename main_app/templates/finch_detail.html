@@ -1,0 +1,107 @@
+{% extends 'base.html' %} 
+{% block content %}
+<div class="detail__img">
+    <img src="{{finch.img}}" alt="{{finch.name}}" />
+</div>
+<div class="detail__name">
+  
+    <h1 class="title">{{finch.name}}</h1>
+</div>
+<div class="detail__container">
+    <div class="detail__cars mb-5">
+        <h3 class="title is-3">Cars</h3>
+
+        {% for car in finch.cars.all %}
+            <div class="car">
+                <span>{{forloop.counter}}</span>
+                <span><b>{{car.make}}</b></span>
+                <span>{{car.model}}</span>
+            </div>
+            <span>
+                <div class="dropdown">
+                  <div class="dropdown-trigger">
+                    <button
+                      class="button"
+                      aria-haspopup="true"
+                      aria-controls="dropdown-menu"
+                    >
+                      <span>Add to Body</span>
+                      <span class="icon is-small">
+                        <i class="fas fa-angle-down" aria-hidden="true"></i>
+                      </span>
+                    </button>
+                  </div>
+                  <div class="dropdown-menu" id="dropdown-menu" role="menu">
+                    <div class="dropdown-content">
+                      {% for body in bodys %}
+                  <!-- each playlist becomes a drop
+                  down item with the ids needed to add to the join table  -->
+                      <a
+                        href="{% url 'body_car_assoc' body.pk car.pk %}?assoc=add"
+                        class="dropdown-item"
+                      >
+                        {{body.style}}
+                      </a>
+                      {% endfor %}
+                    </div>
+                  </div>
+                </div>
+              </span>
+      
+        {% empty %}
+            <article class="message">
+                <div class="message-header">
+                    <p>No cars yet</p>
+                </div>
+            </article>
+
+        {% endfor %}
+    </div>
+    <form class="mb-5" action="{% url 'car_create' finch.pk %}" method="post">
+        {% csrf_token %}
+        <div class="field has-addons">
+            <div class="control">
+                <input
+                    class="input"
+                    type="text"
+                    name="make"
+                    placeholder="make"
+                    required
+                />
+            </div>
+            <div class="control">
+                <input
+                    class="input"
+                    type="text"
+                    name="model"
+                    placeholder="model"
+                    
+                    required
+                />
+            </div>
+            <div class="control">
+                <input class="button is-primary" type="submit" value="Add Car" />
+            </div>
+        </div>
+    </form>
+    <div class="buttons">
+        <div class="buttons">
+    <!-- just like how we added the artist detail link we can do the same thing for update -->
+    <a href="{% url 'finch_update' finch.pk %}" class="button is-info"> Updates
+        <span class="icon">
+            <i class="fas fa-edit"></i>
+        </span>
+    </a>
+    <a href="/finch/{{finch.id}}/delete" class="button is-danger">
+        <span class="icon">
+            <i class="fas fa-trash-alt"></i>
+        </span>
+    </a>
+</div>
+    <div class="detail__about">
+        <h4 class="title is-4">About</h4>
+        <p>{{finch.info}}</p>
+    </div>
+</div>
+
+{% endblock %}
